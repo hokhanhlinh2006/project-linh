@@ -8,6 +8,70 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+    <style>
+        .carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+button {
+    position: absolute;
+    top: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.dots-container {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #717171;
+}
+
+    </style>
     <div class="header">
         <div class="logo">⚡ cyber</div>
         <div class="search-bar">
@@ -33,7 +97,26 @@
         <a href="#"> 🎮 Gaming</a>
     </div>
     <div>
-        <img width="1440" height="632" src="../img/Banner.png" alt="">
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-item active">
+                    <img width="1440" height="632"src="../img/Banner.png" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img width="1440" height="632"src="https://cdn.tgdd.vn/Products/Images/42/251192/Slider/iphone-14-pro-max-thumb-1020x570.jpg" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img width="1440" height="632" src="https://bizweb.dktcdn.net/thumb/1024x1024/100/483/956/products/iphone-14-pro-max-tong-quan-1020x570-8a8c1243-934e-4b95-9e2e-2f051845ba4c.jpg?v=1682905511140" alt="">
+                </div>
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="dots-container">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
         <button class="image-button" onclick="alert()">Mua ngay</button>
     </div><br><br><br>
     <div class="category-container">
@@ -191,5 +274,62 @@
             </div>
         </footer>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const carousel = document.querySelector(".carousel");
+    const slides = document.querySelectorAll(".carousel-item");
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+    let autoSlideInterval;
+    const dots = document.querySelectorAll(".dot");
+    function updateCarousel() {
+        slides.forEach((slide, index) => {
+            slide.classList.remove("active");
+            dots[index].classList.remove("active");
+        });
+        slides[currentIndex].classList.add("active");
+        dots[currentIndex].classList.add("active");
+        const offset = -currentIndex * 100;
+        carousel.style.transform = `translateX(${offset}%)`;
+    }
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateCarousel();
+    }
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    }
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(nextSlide, 3000);
+    }
+    function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+    }
+    document.querySelector(".next").addEventListener("click", function () {
+        stopAutoSlide();
+        nextSlide();
+        startAutoSlide();
+    });
+    document.querySelector(".prev").addEventListener("click", function () {
+        stopAutoSlide();
+        prevSlide();
+        startAutoSlide();
+    });
+    dots.forEach((dot, index) => {
+        dot.addEventListener("click", function () {
+            stopAutoSlide();
+            currentIndex = index;
+            updateCarousel();
+            startAutoSlide();
+        });
+    });
+    document.querySelector(".carousel-container").addEventListener("mouseenter", stopAutoSlide);
+    document.querySelector(".carousel-container").addEventListener("mouseleave", startAutoSlide);
+
+    startAutoSlide();
+});
+
+    </script>
 </body>
 </html>
